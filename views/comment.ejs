@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments to Post</title>
+</head>
+<body>
+    <h1>This is Comment</h1>
+
+    <%post%>
+    <a href="/profile/post.user.id"> <%=post.user.name%></a>
+    <h2 style="margin-top: 0.92px;"><%=post.content%></h2>
+    <%if(locals.user){%>
+        <form action="/posts/add-comment" method="post">
+            <textarea name="content" cols="30" rows="5"></textarea>
+            <input type="hidden" value="<%=post._id%>" name="post">
+            <input type="submit" value="add comment">
+        </form>
+    <%}%>
+    <ul>
+        
+        <%for(let comment of post.comment){%>
+            <li>
+               <a href="/profile/<%=comment.user.id%>"> <%=comment.user.name%></a>
+                <%if(locals.user && locals.user.id==comment.user.id){%>
+                    <a href="/posts/delete-comment/<%=comment._id%>">delete comment</a>
+                <%}%>
+                <h3><%=comment.content%></h3>
+            </li>
+        <%}%>
+
+    </ul>
+    
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=users.name%></title>
+</head>
+<body>
+
+    <%if(locals.user){%>
+    <form action="/profile/sign-out" method="post">
+        <input type="submit" value="Sign Out">
+    </form>
+    <%}else{%>
+        <a href="/">sign in</a>
+    <%}%>
+
+    
+
+    <h1>Profile is here</h1>
+    <h1><%=users.name%></h1>
+    <h6><%=users.email%></h6>
+    
+    <div>
+        <h1>Friends</h1>
+        <ul>
+            <%for(let friend of friends){%>
+                <%if(friend.friend_recieve.id===users.id){%>
+                    <li><a href="/profile/<%=friend.friend_send._id%>"><%=friend.friend_send.name%></a></li>
+                <%}else{%>
+                    <li><a href="/profile/<%=friend.friend_recieve._id%>"><%=friend.friend_recieve.name%></a></li>
+                <%}%>
+            <%}%>
+        </ul>
+
+        <%if(locals.user && locals.user.id===users.id){%>
+            <h1>Friend request sent</h1>
+            <ul>
+                <%for(let friend of friend_recieved){%>
+                    <li><a href="/profile/<%=friend.friend_recieve._id%>"><%=friend.friend_recieve.name%></a></li>
+                <%}%>
+            </ul>
+
+            <h1>Friend request</h1>
+            <ul>
+                <%for(let friend of friend_send){%>
+                    <li><a href="/profile/<%=friend.friend_send._id%>"><%=friend.friend_send.name%></a></li>
+                <%}%>
+            </ul>
+        
+        <%}%>
+    </div>
+
+    <a href="/posts" target="_blank">see posts by others</a>
+
+    <%if(locals.user && locals.user.id!==users.id){%>
+        <form action="/profile/friend_request/<%=users.id%>" method="post">
+            <input type="submit" value="Send Friend Request">
+        </form>
+    <%}%>
+    
+    <h1><%=users.name%> Posts</h1>
+    <ul>
+        <form action="/posts/delete-post" method="post">
+
+            <%if(locals.user && locals.user.id===users.id){%>
+            <input type="submit" value="Delete Post">
+            <%}%>
+            
+            
+            <%for(let post of posts){%>
+                <li>
+                    <%if(locals.user && locals.user.id===users.id){%>
+                    <input type="checkbox" name="post_id" value="<%=post._id%>">
+                    <%}%>
+                    <h2 style="margin-top: 0.92px;margin-bottom: -5.08px;"><%=post.content%></h2>
+                    <p><%=post.comment.length%><a href="/posts/comment/<%=post._id%>" target="_blank">comments</a></p>
+                </li>
+                <br>
+            <%}%>
+
+        </form>
+    </ul>
+
+</body>
+</html>
